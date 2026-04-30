@@ -87,3 +87,13 @@ model AIProviderConfig {
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
 }
+
+model BlogSettings {
+  id           String   @id @default(cuid())
+  siteTitle    String   @default("AI Blog")
+  siteSubtitle String   @default("AI-assisted publishing")
+  accent       String   @default("slate")
+  fontPair     String   @default("serif")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}

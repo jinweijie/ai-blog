@@ -29,6 +29,7 @@ export default async function AdminLayout({
           <Link href="/admin/drafts">Drafts</Link>
           <Link href="/admin/posts">Posts</Link>
           <Link href="/admin/providers">AI Providers</Link>
+          <Link href="/admin/settings">Settings</Link>
         </nav>
         <form action={handleSignOut} className="mt-6">
           <button className="btn-secondary w-full" type="submit">

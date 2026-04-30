@@ -4,10 +4,42 @@
 
 :root {
   color-scheme: light;
+  --bg: #ffffff;
+  --text: #0f172a;
+  --muted: #64748b;
+  --card: #ffffff;
+  --border: #e2e8f0;
+  --accent: #0f172a;
+  --font-body: var(--font-serif);
+  --font-heading: var(--font-sans);
+}
+
+html[data-accent="indigo"] {
+  --accent: #4338ca;
+}
+
+html[data-accent="emerald"] {
+  --accent: #0f766e;
+}
+
+html[data-accent="amber"] {
+  --accent: #b45309;
+}
+
+html[data-reader-font="sans"] {
+  --font-body: var(--font-sans);
+  --font-heading: var(--font-serif);
 }
 
 body {
   @apply bg-white text-slate-900;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-heading);
 }
 
 input, textarea, select {
@@ -23,13 +55,14 @@ button {
 }
 
 a.btn-primary,
-a.btn-secondary,
-a.btn-ghost {
++a.btn-secondary,
++a.btn-ghost {
   @apply no-underline;
 }
 
 .btn-primary {
   @apply inline-flex items-center justify-center rounded-full px-5 py-2.5 text-sm font-semibold bg-slate-900 text-white hover:bg-slate-800 disabled:opacity-60 disabled:cursor-not-allowed;
+  background: var(--accent);
 }
 
 .btn-secondary {
@@ -42,6 +75,8 @@ a.btn-ghost {
 
 .card {
   @apply rounded-xl border border-slate-200 bg-white shadow-sm;
+  background: var(--card);
+  border-color: var(--border);
 }
 
 .section-title {
@@ -65,5 +100,90 @@ a.btn-ghost {
 }
 
 .admin-nav a[aria-current="page"] {
-  @apply bg-slate-900 text-white;
+  @apply text-white;
+  background: var(--accent);
+}
+
+.reader-toolbar {
+  @apply flex flex-wrap items-center gap-3 rounded-xl border border-slate-200 bg-white p-3;
+  border-color: var(--border);
+  background: var(--card);
+}
+
+.reader-group {
+  @apply flex items-center gap-2;
+}
+
+.reader-chip {
+  @apply rounded-full border border-slate-200 px-3 py-1 text-xs font-semibold text-slate-600 hover:bg-slate-100;
+}
+
+.reader-chip.active {
+  @apply text-white;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.reader-surface {
+  @apply rounded-2xl border border-slate-200 bg-white p-6;
+  background: var(--card);
+  border-color: var(--border);
+}
+
+.reader-content h1,
+.reader-content h2,
+.reader-content h3 {
+  @apply mt-8 text-slate-900;
+}
+
+.reader-content p {
+  @apply mt-4 text-lg leading-8 text-slate-700;
+}
+
+.reader-content ul,
+.reader-content ol {
+  @apply mt-4 pl-6 text-slate-700;
+}
+
+.reader-content blockquote {
+  @apply mt-4 border-l-4 border-slate-300 pl-4 text-slate-600;
+}
+
+.reader-content img {
+  @apply my-6 rounded-xl border border-slate-200;
+  max-width: 100%;
+  height: auto;
+}
+
+.reading-mode .reader-surface {
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+html[data-reader-theme="ivory"] {
+  --bg: #fbf8f2;
+  --text: #1f2937;
+  --card: #fdfaf4;
+  --border: #eadfcd;
+}
+
+html[data-reader-theme="sepia"] {
+  --bg: #f5ede0;
+  --text: #3b2f2f;
+  --card: #fbf3e7;
+  --border: #e0d1b6;
+}
+
+html[data-reader-theme="dim"] {
+  --bg: #0f172a;
+  --text: #e2e8f0;
+  --card: #111827;
+  --border: #1f2937;
+}
+
+html[data-reader-theme="dim"] .reader-content p,
+html[data-reader-theme="dim"] .reader-content li,
+html[data-reader-theme="dim"] .reader-content blockquote {
+  @apply text-slate-300;
 }

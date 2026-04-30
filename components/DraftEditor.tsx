@@ -2,6 +2,7 @@
 
 import { useFormStatus } from "react-dom";
 import { useRef, useState } from "react";
+import PostEditorHelp from "@/components/PostEditorHelp";
 
 type ProviderOption = {
   id: string;
@@ -161,6 +162,7 @@ export default function DraftEditor({
             rows={12}
             className="w-full"
           />
+          <PostEditorHelp />
         </div>
         <div className="flex flex-wrap items-center gap-3">
           <SubmitButton label="Save draft" pendingLabel="Saving..." />
