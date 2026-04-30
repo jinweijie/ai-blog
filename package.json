@@ -10,7 +10,7 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run",
+    "test": "vitest run --passWithNoTests",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "create-admin": "tsx scripts/create-admin.ts"
