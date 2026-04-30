@@ -25,8 +25,8 @@ type DraftData = {
 type DraftEditorProps = {
   draft: DraftData;
   providers: ProviderOption[];
-  updateDraft: (formData: FormData) => Promise<{ error?: string; success?: boolean }>;
-  publishDraft: (formData: FormData) => Promise<{ error?: string; success?: boolean }>;
+  updateDraft: (formData: FormData) => Promise<void>;
+  publishDraft: (formData: FormData) => Promise<void>;
 };
 
 function SubmitButton({ label }: { label: string }) {

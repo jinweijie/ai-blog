@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { encryptSecret } from "@/lib/crypto";
 import { revalidatePath } from "next/cache";
 
-export async function createProvider(formData: FormData) {
+export async function createProvider(formData: FormData): Promise<void> {
   const name = String(formData.get("name") || "").trim();
   const provider = String(formData.get("provider") || "").trim();
   const model = String(formData.get("model") || "").trim();
@@ -14,7 +14,7 @@ export async function createProvider(formData: FormData) {
   const azureApiVersion = String(formData.get("azureApiVersion") || "").trim();
 
   if (!name || !provider || !model || !apiKey) {
-    return { error: "Name, provider, model, and API key are required." };
+    throw new Error("Name, provider, model, and API key are required.");
   }
 
   await prisma.aIProviderConfig.create({
@@ -30,5 +30,4 @@ export async function createProvider(formData: FormData) {
   });
 
   revalidatePath("/admin/providers");
-  return { success: true };
 }

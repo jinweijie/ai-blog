@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Home() {
   return (
     <section className="space-y-6">
@@ -6,12 +8,12 @@ export default function Home() {
         Build and publish AI-assisted content with a secure admin workspace.
       </p>
       <div className="flex gap-4">
-        <a className="bg-slate-900 text-white" href="/blog">
+        <Link className="bg-slate-900 text-white" href="/blog">
           Read the blog
-        </a>
-        <a className="border border-slate-300" href="/admin">
+        </Link>
+        <Link className="border border-slate-300" href="/admin">
           Go to admin
-        </a>
+        </Link>
       </div>
     </section>
   );

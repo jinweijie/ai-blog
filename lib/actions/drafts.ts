@@ -5,14 +5,14 @@ import { slugify } from "@/lib/slugify";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-export async function createDraft(formData: FormData) {
+export async function createDraft(formData: FormData): Promise<void> {
   const title = String(formData.get("title") || "").trim();
   const slugInput = String(formData.get("slug") || "").trim();
   const bulletPoints = String(formData.get("bulletPoints") || "").trim();
   const notes = String(formData.get("notes") || "").trim();
 
   if (!title || !bulletPoints) {
-    return { error: "Title and bullet points are required." };
+    throw new Error("Title and bullet points are required.");
   }
 
   const slug = slugInput ? slugify(slugInput) : slugify(title);
@@ -30,10 +30,10 @@ export async function createDraft(formData: FormData) {
   redirect(`/admin/drafts/${draft.id}`);
 }
 
-export async function updateDraft(formData: FormData) {
+export async function updateDraft(formData: FormData): Promise<void> {
   const id = String(formData.get("id") || "");
   if (!id) {
-    return { error: "Draft id is missing." };
+    throw new Error("Draft id is missing.");
   }
 
   const title = String(formData.get("title") || "").trim();
@@ -46,7 +46,7 @@ export async function updateDraft(formData: FormData) {
   const coverImageUrl = String(formData.get("coverImageUrl") || "").trim();
 
   if (!title || !bulletPoints) {
-    return { error: "Title and bullet points are required." };
+    throw new Error("Title and bullet points are required.");
   }
 
   const slug = slugInput ? slugify(slugInput) : slugify(title);
@@ -67,13 +67,12 @@ export async function updateDraft(formData: FormData) {
 
   revalidatePath(`/admin/drafts/${id}`);
   revalidatePath("/admin/drafts");
-  return { success: true };
 }
 
-export async function publishDraft(formData: FormData) {
+export async function publishDraft(formData: FormData): Promise<void> {
   const id = String(formData.get("id") || "");
   if (!id) {
-    return { error: "Draft id is missing." };
+    throw new Error("Draft id is missing.");
   }
 
   const draft = await prisma.ideaDraft.findUnique({
@@ -82,11 +81,11 @@ export async function publishDraft(formData: FormData) {
   });
 
   if (!draft) {
-    return { error: "Draft not found." };
+    throw new Error("Draft not found.");
   }
 
   if (!draft.generatedBody) {
-    return { error: "Generate content before publishing." };
+    throw new Error("Generate content before publishing.");
   }
 
   const slug = slugify(draft.slug || draft.title);
@@ -99,7 +98,7 @@ export async function publishDraft(formData: FormData) {
   });
 
   if (existing) {
-    return { error: "Slug already exists on another post." };
+    throw new Error("Slug already exists on another post.");
   }
 
   const summary = draft.generatedBody.slice(0, 180).trim();
@@ -142,5 +141,4 @@ export async function publishDraft(formData: FormData) {
 
   revalidatePath("/admin/posts");
   revalidatePath("/blog");
-  return { success: true };
 }

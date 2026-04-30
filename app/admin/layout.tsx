@@ -1,5 +1,6 @@
 import { auth, signOut } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 
 export default async function AdminLayout({
   children,
@@ -30,18 +31,18 @@ export default async function AdminLayout({
         </form>
       </header>
       <nav className="flex flex-wrap gap-3 text-sm">
-        <a className="border border-slate-200 px-3 py-2" href="/admin">
+        <Link className="border border-slate-200 px-3 py-2" href="/admin">
           Overview
-        </a>
-        <a className="border border-slate-200 px-3 py-2" href="/admin/drafts">
+        </Link>
+        <Link className="border border-slate-200 px-3 py-2" href="/admin/drafts">
           Drafts
-        </a>
-        <a className="border border-slate-200 px-3 py-2" href="/admin/posts">
+        </Link>
+        <Link className="border border-slate-200 px-3 py-2" href="/admin/posts">
           Posts
-        </a>
-        <a className="border border-slate-200 px-3 py-2" href="/admin/providers">
+        </Link>
+        <Link className="border border-slate-200 px-3 py-2" href="/admin/providers">
           AI Providers
-        </a>
+        </Link>
       </nav>
       {children}
     </div>

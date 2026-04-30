@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 
 export default async function BlogPost({
@@ -23,9 +24,12 @@ export default async function BlogPost({
         </p>
       </header>
       {post.coverImageUrl && (
-        <img
+        <Image
           src={post.coverImageUrl}
           alt={post.title}
+          width={1200}
+          height={630}
+          unoptimized
           className="w-full rounded-lg border border-slate-200"
         />
       )}

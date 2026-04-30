@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import type { JWT } from "next-auth/jwt";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import { prisma } from "@/lib/prisma";
@@ -92,13 +93,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   ],
   callbacks: {
     async jwt({ token, user }) {
+      const jwt = token as JWT;
       if (user) {
         const refreshToken = await createRefreshToken(user.id as string);
         const accessToken = crypto.randomBytes(24).toString("base64url");
         const accessTokenExpires = Date.now() + ACCESS_TOKEN_TTL_MS;
 
         return {
-          ...token,
+          ...jwt,
           accessToken,
           accessTokenExpires,
           refreshToken,
@@ -111,21 +113,21 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         };
       }
 
-      if (token.accessTokenExpires && Date.now() < token.accessTokenExpires) {
-        return token;
+      if (jwt.accessTokenExpires && Date.now() < jwt.accessTokenExpires) {
+        return jwt;
       }
 
-      if (!token.refreshToken || !token.user?.id) {
-        return { ...token, error: "RefreshTokenMissing" };
+      if (!jwt.refreshToken || !jwt.user?.id) {
+        return { ...jwt, error: "RefreshTokenMissing" };
       }
 
-      const nextRefresh = await rotateRefreshToken(token.user.id as string, token.refreshToken);
+      const nextRefresh = await rotateRefreshToken(jwt.user.id, jwt.refreshToken);
       if (!nextRefresh) {
-        return { ...token, error: "RefreshTokenExpired" };
+        return { ...jwt, error: "RefreshTokenExpired" };
       }
 
       return {
-        ...token,
+        ...jwt,
         accessToken: crypto.randomBytes(24).toString("base64url"),
         accessTokenExpires: Date.now() + ACCESS_TOKEN_TTL_MS,
         refreshToken: nextRefresh,
