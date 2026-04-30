@@ -6,7 +6,7 @@ export default auth((req) => {
     return NextResponse.next();
   }
   if (!req.auth?.user) {
-    const signInUrl = new URL("/admin/sign-in", req.nextUrl.origin);
+    const signInUrl = new URL("/sign-in", req.nextUrl.origin);
     signInUrl.searchParams.set("callbackUrl", req.nextUrl.pathname);
     return NextResponse.redirect(signInUrl);
   }
