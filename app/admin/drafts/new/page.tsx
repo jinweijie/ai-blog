@@ -1,4 +1,5 @@
 import { createDraft } from "@/lib/actions/drafts";
+import FormSubmitButton from "@/components/FormSubmitButton";
 
 export default function NewDraftPage() {
   return (
@@ -31,9 +32,7 @@ export default function NewDraftPage() {
           <label htmlFor="notes">Notes</label>
           <textarea id="notes" name="notes" rows={4} className="w-full" />
         </div>
-        <button className="btn-primary" type="submit">
-          Create draft
-        </button>
+        <FormSubmitButton label="Create draft" pendingLabel="Creating..." />
       </form>
     </section>
   );

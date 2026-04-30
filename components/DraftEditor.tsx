@@ -29,11 +29,20 @@ type DraftEditorProps = {
   publishDraft: (formData: FormData) => Promise<void>;
 };
 
-function SubmitButton({ label }: { label: string }) {
+function SubmitButton({ label, pendingLabel }: { label: string; pendingLabel: string }) {
   const { pending } = useFormStatus();
   return (
     <button className="btn-primary" type="submit" disabled={pending}>
-      {pending ? "Saving..." : label}
+      {pending ? pendingLabel : label}
+    </button>
+  );
+}
+
+function PublishButton() {
+  const { pending } = useFormStatus();
+  return (
+    <button className="btn-primary" type="submit" disabled={pending}>
+      {pending ? "Publishing..." : "Publish"}
     </button>
   );
 }
@@ -154,7 +163,7 @@ export default function DraftEditor({
           />
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <SubmitButton label="Save draft" />
+          <SubmitButton label="Save draft" pendingLabel="Saving..." />
           <button
             className="btn-secondary"
             type="button"
@@ -173,9 +182,7 @@ export default function DraftEditor({
           <div className="font-medium">Ready to publish?</div>
           <div className="text-sm text-slate-600">This will push the draft to the public blog.</div>
         </div>
-        <button className="btn-primary" type="submit">
-          Publish
-        </button>
+        <PublishButton />
       </form>
     </div>
   );

@@ -1,4 +1,5 @@
 import { signIn } from "@/lib/auth";
+import FormSubmitButton from "@/components/FormSubmitButton";
 
 export default function SignInPage({
   searchParams,
@@ -31,9 +32,7 @@ export default function SignInPage({
           <label htmlFor="password">Password</label>
           <input id="password" name="password" type="password" required className="w-full" />
         </div>
-        <button className="btn-primary w-full" type="submit">
-          Sign in
-        </button>
+        <FormSubmitButton label="Sign in" pendingLabel="Signing in..." className="btn-primary w-full" />
       </form>
     </div>
   );
