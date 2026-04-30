@@ -1,0 +1,89 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+}
+
+enum ProviderType {
+  OPENAI
+  AZURE_OPENAI
+  ANTHROPIC
+}
+
+model User {
+  id           String         @id @default(cuid())
+  email        String         @unique
+  name         String?
+  passwordHash String
+  role         String         @default("admin")
+  refreshTokens RefreshToken[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+}
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  userId    String
+  tokenHash String
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Post {
+  id            String     @id @default(cuid())
+  title         String
+  slug          String     @unique
+  status        PostStatus @default(DRAFT)
+  summary       String?
+  body          String
+  coverImageUrl String?
+  tags          String[]
+  draftId       String?    @unique
+  draft         IdeaDraft? @relation(fields: [draftId], references: [id])
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  publishedAt   DateTime?
+}
+
+model IdeaDraft {
+  id               String             @id @default(cuid())
+  title            String
+  slug             String
+  bulletPoints     String
+  notes            String?
+  generatedBody    String?
+  tags             String             @default("")
+  coverImageUrl    String?
+  providerConfigId String?
+  providerConfig   AIProviderConfig?  @relation(fields: [providerConfigId], references: [id])
+  post             Post?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+}
+
+model AIProviderConfig {
+  id              String        @id @default(cuid())
+  name            String
+  provider        ProviderType
+  model           String
+  apiKeyEnc       String
+  azureEndpoint   String?
+  azureDeployment String?
+  azureApiVersion String?
+  drafts          IdeaDraft[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
