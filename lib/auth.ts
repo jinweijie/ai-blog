@@ -112,20 +112,20 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             name: user.name,
             role: (user as { role?: string }).role ?? "admin",
           },
-        };
+        } as JWT;
       }
 
       if (jwt.accessTokenExpires && Date.now() < jwt.accessTokenExpires) {
-        return jwt;
+        return jwt as JWT;
       }
 
       if (!jwt.refreshToken || !jwt.user?.id) {
-        return { ...jwt, error: "RefreshTokenMissing" };
+        return { ...jwt, error: "RefreshTokenMissing" } as JWT;
       }
 
       const nextRefresh = await rotateRefreshToken(jwt.user.id, jwt.refreshToken);
       if (!nextRefresh) {
-        return { ...jwt, error: "RefreshTokenExpired" };
+        return { ...jwt, error: "RefreshTokenExpired" } as JWT;
       }
 
       return {
@@ -133,7 +133,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         accessToken: crypto.randomBytes(24).toString("base64url"),
         accessTokenExpires: Date.now() + ACCESS_TOKEN_TTL_MS,
         refreshToken: nextRefresh,
-      };
+      } as JWT;
     },
     async session({ session, token }) {
       if (token.user) {
