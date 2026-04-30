@@ -23,15 +23,64 @@ This document describes the end-to-end pipeline to create, configure, deploy, an
 
 ## Human vs AI Responsibilities
 
-### Human-required
+### Human-required (detailed)
 
-- Provide or approve:
-  - GitHub PAT (repo + actions:read + workflow optional)
-  - Vercel token (project + env access)
-  - Neon Postgres URL
-  - Admin credentials
-- Revoke tokens after setup
-- Add real AI provider API keys (OpenAI/Azure/Anthropic) if generation should run
+These steps involve account permissions and token creation.
+
+#### 1) GitHub PAT (Personal Access Token)
+
+A PAT is a token that allows API access to GitHub.
+
+**Steps:**
+
+1. Open GitHub → `Settings` → `Developer settings` → `Personal access tokens` → `Tokens (classic)`.
+2. Click `Generate new token (classic)`.
+3. Name it (e.g., `ai-blog-automation`) and set an expiration (7–30 days).
+4. Scopes to check:
+   - `repo`
+   - `workflow` (optional but recommended if CI needs reruns)
+   - `read:org` (only if the repo is in an org)
+5. Click `Generate token` and copy it.
+
+Send this PAT to the AI. Revoke it after setup.
+
+#### 2) Vercel API token
+
+**Steps:**
+
+1. Open `https://vercel.com/account/tokens`.
+2. Click `Create Token`.
+3. Name it (e.g., `ai-blog-automation`) and set an expiration.
+4. Copy the token.
+
+Send this token to the AI. Revoke it after setup.
+
+#### 3) Neon Postgres database
+
+**Option A: Neon via Vercel integration**
+
+1. In Vercel, open your project.
+2. Go to `Integrations` → `Neon Postgres`.
+3. Install and follow the prompts.
+4. Copy the `DATABASE_URL` from Vercel environment settings.
+
+**Option B: Neon direct**
+
+1. Create a Neon project in Neon console.
+2. Copy connection string from `Connect`.
+3. Provide the connection string as `DATABASE_URL` to the AI.
+
+#### 4) Admin credentials
+
+Provide admin email, password, and optional name to the AI.
+
+#### 5) Provider API keys (optional)
+
+Provide one or more:
+
+- OpenAI API key
+- Azure OpenAI API key + endpoint + deployment + version
+- Anthropic API key
 
 ### AI-capable (preferred)
 
@@ -155,4 +204,3 @@ If AI has tokens, it should:
 
 - Tokens should be short-lived.
 - Revoke after setup.
-
