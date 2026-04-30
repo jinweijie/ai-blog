@@ -2,7 +2,7 @@ import { marked } from "marked";
 import sanitizeHtml from "sanitize-html";
 
 export function renderMarkdown(source: string) {
-  const html = marked.parse(source || "");
+  const html = marked.parse(source || "", { async: false }) as string;
   return sanitizeHtml(html, {
     allowedTags: [
       "p",
