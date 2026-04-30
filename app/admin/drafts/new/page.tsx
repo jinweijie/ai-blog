@@ -4,10 +4,10 @@ export default function NewDraftPage() {
   return (
     <section className="space-y-6">
       <div>
-        <h2 className="text-xl font-semibold">New draft</h2>
-        <p className="text-sm text-slate-600">Start from bullet points.</p>
+        <h2 className="section-title">New draft</h2>
+        <p className="section-subtitle">Start from bullet points.</p>
       </div>
-      <form action={createDraft} className="space-y-4">
+      <form action={createDraft} className="card space-y-4 p-6">
         <div className="space-y-1">
           <label htmlFor="title">Title</label>
           <input id="title" name="title" className="w-full" required />
@@ -31,7 +31,7 @@ export default function NewDraftPage() {
           <label htmlFor="notes">Notes</label>
           <textarea id="notes" name="notes" rows={4} className="w-full" />
         </div>
-        <button className="bg-slate-900 text-white" type="submit">
+        <button className="btn-primary" type="submit">
           Create draft
         </button>
       </form>

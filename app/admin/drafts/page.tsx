@@ -10,10 +10,10 @@ export default async function DraftList() {
     <section className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-semibold">Drafts</h2>
-          <p className="text-sm text-slate-600">Idea drafts and generated content.</p>
+          <h2 className="section-title">Drafts</h2>
+          <p className="section-subtitle">Idea drafts and generated content.</p>
         </div>
-        <Link className="bg-slate-900 text-white" href="/admin/drafts/new">
+        <Link className="btn-primary" href="/admin/drafts/new">
           New draft
         </Link>
       </div>
@@ -25,7 +25,7 @@ export default async function DraftList() {
             <Link
               key={draft.id}
               href={`/admin/drafts/${draft.id}`}
-              className="block rounded-lg border border-slate-200 p-4"
+              className="card block p-4"
             >
               <div className="flex items-center justify-between">
                 <div>

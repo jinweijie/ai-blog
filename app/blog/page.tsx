@@ -18,7 +18,7 @@ export default async function BlogIndex() {
           <p className="text-slate-600">No published posts yet.</p>
         ) : (
           posts.map((post) => (
-            <article key={post.id} className="rounded-lg border border-slate-200 p-5">
+            <article key={post.id} className="card p-5">
               <h2 className="text-xl font-semibold">
                 <Link href={`/blog/${post.slug}`}>{post.title}</Link>
               </h2>

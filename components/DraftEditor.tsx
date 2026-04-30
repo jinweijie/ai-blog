@@ -32,7 +32,7 @@ type DraftEditorProps = {
 function SubmitButton({ label }: { label: string }) {
   const { pending } = useFormStatus();
   return (
-    <button className="bg-slate-900 text-white" type="submit" disabled={pending}>
+    <button className="btn-primary" type="submit" disabled={pending}>
       {pending ? "Saving..." : label}
     </button>
   );
@@ -79,7 +79,7 @@ export default function DraftEditor({
 
   return (
     <div className="space-y-6">
-      <form ref={formRef} action={updateDraft} className="space-y-4">
+      <form ref={formRef} action={updateDraft} className="card space-y-4 p-6">
         <input type="hidden" name="id" value={draft.id} />
         <div className="grid gap-4 md:grid-cols-2">
           <div className="space-y-1">
@@ -156,7 +156,7 @@ export default function DraftEditor({
         <div className="flex flex-wrap items-center gap-3">
           <SubmitButton label="Save draft" />
           <button
-            className="border border-slate-300"
+            className="btn-secondary"
             type="button"
             onClick={handleGenerate}
           >
@@ -167,10 +167,14 @@ export default function DraftEditor({
           )}
         </div>
       </form>
-      <form action={publishDraft} className="space-y-2">
+      <form action={publishDraft} className="card flex items-center justify-between p-4">
         <input type="hidden" name="id" value={draft.id} />
-        <button className="bg-emerald-600 text-white" type="submit">
-          Publish to blog
+        <div>
+          <div className="font-medium">Ready to publish?</div>
+          <div className="text-sm text-slate-600">This will push the draft to the public blog.</div>
+        </div>
+        <button className="btn-primary" type="submit">
+          Publish
         </button>
       </form>
     </div>

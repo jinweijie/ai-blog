@@ -9,11 +9,11 @@ export default async function ProviderPage() {
   return (
     <section className="space-y-6">
       <div>
-        <h2 className="text-xl font-semibold">AI providers</h2>
-        <p className="text-sm text-slate-600">Configure API access.</p>
+        <h2 className="section-title">AI providers</h2>
+        <p className="section-subtitle">Configure API access.</p>
       </div>
 
-      <form action={createProvider} className="space-y-4 rounded-lg border border-slate-200 p-4">
+      <form action={createProvider} className="card space-y-4 p-6">
         <div className="grid gap-4 md:grid-cols-2">
           <div className="space-y-1">
             <label htmlFor="name">Name</label>
@@ -52,7 +52,7 @@ export default async function ProviderPage() {
             <input id="azureApiVersion" name="azureApiVersion" className="w-full" />
           </div>
         </div>
-        <button className="bg-slate-900 text-white" type="submit">
+        <button className="btn-primary" type="submit">
           Save provider
         </button>
       </form>
@@ -62,7 +62,7 @@ export default async function ProviderPage() {
           <p className="text-sm text-slate-600">No providers configured.</p>
         ) : (
           providers.map((provider) => (
-            <div key={provider.id} className="rounded-lg border border-slate-200 p-4">
+            <div key={provider.id} className="card p-4">
               <div className="font-medium">{provider.name}</div>
               <div className="text-xs text-slate-500">
                 {provider.provider} · {provider.model}

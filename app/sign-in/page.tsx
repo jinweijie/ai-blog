@@ -17,7 +17,7 @@ export default function SignInPage({
   }
 
   return (
-    <div className="mx-auto max-w-md space-y-6 rounded-lg border border-slate-200 p-6">
+    <div className="card mx-auto max-w-md space-y-6 p-6">
       <div>
         <h1 className="text-2xl font-semibold">Admin sign in</h1>
         <p className="text-sm text-slate-600">Use your admin credentials.</p>
@@ -31,7 +31,7 @@ export default function SignInPage({
           <label htmlFor="password">Password</label>
           <input id="password" name="password" type="password" required className="w-full" />
         </div>
-        <button className="w-full bg-slate-900 text-white" type="submit">
+        <button className="btn-primary w-full" type="submit">
           Sign in
         </button>
       </form>

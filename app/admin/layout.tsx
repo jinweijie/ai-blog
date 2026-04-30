@@ -18,33 +18,33 @@ export default async function AdminLayout({
   }
 
   return (
-    <div className="space-y-8">
-      <header className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold">Admin</h1>
-          <p className="text-sm text-slate-600">Welcome, {session.user.email}</p>
+    <div className="admin-shell">
+      <aside className="card h-fit p-4">
+        <div className="mb-4">
+          <div className="text-sm text-slate-500">Admin</div>
+          <div className="font-semibold">{session.user.email}</div>
         </div>
-        <form action={handleSignOut}>
-          <button className="border border-slate-300" type="submit">
+        <nav className="admin-nav">
+          <Link href="/admin">Overview</Link>
+          <Link href="/admin/drafts">Drafts</Link>
+          <Link href="/admin/posts">Posts</Link>
+          <Link href="/admin/providers">AI Providers</Link>
+        </nav>
+        <form action={handleSignOut} className="mt-6">
+          <button className="btn-secondary w-full" type="submit">
             Sign out
           </button>
         </form>
-      </header>
-      <nav className="flex flex-wrap gap-3 text-sm">
-        <Link className="border border-slate-200 px-3 py-2" href="/admin">
-          Overview
-        </Link>
-        <Link className="border border-slate-200 px-3 py-2" href="/admin/drafts">
-          Drafts
-        </Link>
-        <Link className="border border-slate-200 px-3 py-2" href="/admin/posts">
-          Posts
-        </Link>
-        <Link className="border border-slate-200 px-3 py-2" href="/admin/providers">
-          AI Providers
-        </Link>
-      </nav>
-      {children}
+      </aside>
+      <section className="space-y-6">
+        <header className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-semibold">Workspace</h1>
+            <p className="text-sm text-slate-600">Manage posts and AI drafts.</p>
+          </div>
+        </header>
+        {children}
+      </section>
     </div>
   );
 }

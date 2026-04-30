@@ -19,5 +19,45 @@ label {
 }
 
 button {
-  @apply rounded-md px-4 py-2 font-medium;
+  @apply rounded-md px-4 py-2 font-medium transition;
+}
+
+.btn-primary {
+  @apply bg-slate-900 text-white hover:bg-slate-800;
+}
+
+.btn-secondary {
+  @apply border border-slate-300 text-slate-800 hover:bg-slate-50;
+}
+
+.btn-ghost {
+  @apply text-slate-700 hover:bg-slate-100;
+}
+
+.card {
+  @apply rounded-xl border border-slate-200 bg-white shadow-sm;
+}
+
+.section-title {
+  @apply text-xl font-semibold;
+}
+
+.section-subtitle {
+  @apply text-sm text-slate-600;
+}
+
+.admin-shell {
+  @apply grid gap-6 lg:grid-cols-[220px_minmax(0,1fr)];
+}
+
+.admin-nav {
+  @apply flex flex-col gap-2;
+}
+
+.admin-nav a {
+  @apply rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100;
+}
+
+.admin-nav a[aria-current="page"] {
+  @apply bg-slate-900 text-white;
 }
