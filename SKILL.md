@@ -1,25 +1,24 @@
-# AI Blog Pipeline Skill
+# Generic Software Delivery Pipeline Skill
 
-This document describes the end-to-end pipeline to create, configure, deploy, and operate an AI-powered blog system. It is designed for other AI agents to reproduce the setup with minimal human input.
+This document describes a reusable end-to-end pipeline to create, configure, deploy, and operate a modern web application with maximum AI involvement. It is intended for other AI agents to reproduce the setup with minimal human input.
 
-## Scope
+## Scope (generic)
 
-- Next.js (App Router) app
-- Prisma + Neon Postgres
-- NextAuth v5 (Credentials) with JWT + refresh rotation
-- Admin UI for drafts, posts, providers
-- AI generation (OpenAI / Azure OpenAI / Anthropic)
+- Web app (e.g., Next.js, React, or similar)
+- Database with migrations (e.g., Postgres + ORM)
+- Authentication (credentials or OAuth)
+- Admin UI or internal tooling
 - CI with GitHub Actions
-- Deploy with Vercel
+- Deploy with Vercel (or similar)
 
 ## Required Inputs
 
 - GitHub repo name and owner
-- Vercel team slug and project name
-- Neon Postgres connection string
-- Admin user credentials (email + password + optional name)
-- AUTH_URL (Vercel domain)
-- Secrets (AUTH_SECRET, ENCRYPTION_KEY)
+- Hosting provider team/organization and project name
+- Database connection string
+- Base URL for production
+- Secrets (auth secret, encryption key)
+- Admin user credentials (if applicable)
 
 ## Human vs AI Responsibilities
 
@@ -29,69 +28,64 @@ These steps involve account permissions and token creation.
 
 #### 1) GitHub PAT (Personal Access Token)
 
-A PAT is a token that allows API access to GitHub.
+A PAT allows API access to GitHub.
 
 **Steps:**
 
 1. Open GitHub → `Settings` → `Developer settings` → `Personal access tokens` → `Tokens (classic)`.
 2. Click `Generate new token (classic)`.
-3. Name it (e.g., `ai-blog-automation`) and set an expiration (7–30 days).
+3. Name it (e.g., `automation-pipeline`) and set an expiration (7–30 days).
 4. Scopes to check:
    - `repo`
-   - `workflow` (optional but recommended if CI needs reruns)
+   - `workflow` (optional but recommended for CI reruns)
    - `read:org` (only if the repo is in an org)
 5. Click `Generate token` and copy it.
 
 Send this PAT to the AI. Revoke it after setup.
 
-#### 2) Vercel API token
+#### 2) Hosting provider API token (Vercel example)
 
 **Steps:**
 
 1. Open `https://vercel.com/account/tokens`.
 2. Click `Create Token`.
-3. Name it (e.g., `ai-blog-automation`) and set an expiration.
+3. Name it (e.g., `automation-pipeline`) and set an expiration.
 4. Copy the token.
 
 Send this token to the AI. Revoke it after setup.
 
-#### 3) Neon Postgres database
+#### 3) Database
 
-**Option A: Neon via Vercel integration**
+**Managed via hosting provider integration (preferred)**
 
-1. In Vercel, open your project.
-2. Go to `Integrations` → `Neon Postgres`.
-3. Install and follow the prompts.
-4. Copy the `DATABASE_URL` from Vercel environment settings.
+1. In your hosting provider UI, open your project.
+2. Install the database integration (e.g., Neon, Supabase, PlanetScale).
+3. Copy the `DATABASE_URL` from environment settings.
 
-**Option B: Neon direct**
+**Direct provider setup**
 
-1. Create a Neon project in Neon console.
-2. Copy connection string from `Connect`.
+1. Create a database project in the provider console.
+2. Copy the connection string.
 3. Provide the connection string as `DATABASE_URL` to the AI.
 
-#### 4) Admin credentials
+#### 4) Admin credentials (if applicable)
 
 Provide admin email, password, and optional name to the AI.
 
-#### 5) Provider API keys (optional)
+#### 5) External API keys (optional)
 
-Provide one or more:
-
-- OpenAI API key
-- Azure OpenAI API key + endpoint + deployment + version
-- Anthropic API key
+Provide any API keys required for features (LLM providers, payment, email, etc.).
 
 ### AI-capable (preferred)
 
-With GitHub + Vercel tokens, AI can:
+With GitHub + hosting tokens, AI can:
 
 - Create the repo, push code
-- Configure Vercel project settings
-- Set env vars in Vercel
+- Configure hosting project settings
+- Set env vars in hosting
 - Trigger deploys
 - Diagnose CI failures and fix
-- Run migrations (via Vercel build)
+- Run migrations during build/deploy
 - Validate public and admin endpoints via HTTP
 
 ## Pipeline Steps
@@ -99,25 +93,25 @@ With GitHub + Vercel tokens, AI can:
 ### 1) Repository bootstrap (AI)
 
 - Initialize repo with:
-  - Next.js app
-  - Prisma schema
-  - Auth and admin UI
+  - App framework
+  - Database schema + migrations
+  - Auth + admin UI if needed
   - CI workflow
-  - .env.example
+  - `.env.example`
 - Commit and push to GitHub `main`.
 
-### 2) Secrets and local .env (AI)
+### 2) Secrets and local `.env` (AI)
 
 Generate:
 
 - `AUTH_SECRET` (32 bytes base64)
 - `ENCRYPTION_KEY` (32 bytes base64)
 
-Write to `.env` locally and to `.env.example`:
+Write to `.env` locally and `.env.example`:
 
 ```
 DATABASE_URL=...
-AUTH_URL=https://<project>.vercel.app
+AUTH_URL=https://<project>.hosted.app
 AUTH_SECRET=...
 AUTH_TRUST_HOST=true
 ENCRYPTION_KEY=...
@@ -125,38 +119,38 @@ ENCRYPTION_KEY=...
 
 ### 3) Database (Human/AI)
 
-- Human provides Neon URL or lets AI request it.
-- AI runs Prisma migration locally (optional) and relies on Vercel build to run `prisma migrate deploy`.
+- Human provides database URL or lets AI request it.
+- AI runs migrations locally (optional) and relies on build/deploy to run `migrate deploy`.
 
 ### 4) GitHub Actions CI (AI)
 
-Workflow must include:
+Workflow should include:
 
 - `npm ci`
-- `npm run prisma:generate`
+- `npm run generate` (ORM client)
 - `npm run lint`
 - `npm run typecheck`
 - `npm run test`
 
-Set `test` to pass when no tests:
+If no tests exist yet, allow pass:
 
 ```
 vitest run --passWithNoTests
 ```
 
-### 5) Vercel configuration (AI)
+### 5) Hosting configuration (AI)
 
-Using Vercel token:
+Using hosting token:
 
 - Set env vars for production/preview/development
 - Project settings:
-  - Framework: `nextjs`
-  - Build: `npm run vercel-build`
-  - Output: `.next`
+  - Framework preset
+  - Build command
+  - Output directory
 
 ### 6) Deploy (AI)
 
-Trigger Vercel deployment via API:
+Trigger deployment via provider API:
 
 - `target: production`
 - `gitSource` with repo + repoId + ref
@@ -164,38 +158,29 @@ Trigger Vercel deployment via API:
 ### 7) Post-deploy validation (AI)
 
 - Confirm:
-  - `/` and `/blog` return 200
-  - `/sign-in` returns 200
-  - `/admin` redirects when unauthenticated
+  - `/` and primary pages return 200
+  - Auth pages return 200
+  - Protected routes redirect when unauthenticated
   - Auth flow works with credentials
   - Admin routes return 200 when authenticated
-  - `/api/generate` returns 401 without auth
 
-### 8) Provider setup (Human or AI if keys provided)
+### 8) Feature setup (Human or AI if keys provided)
 
-- Add provider in `/admin/providers`
-- Use conditional Azure fields only when Azure is chosen
-
-### 9) Content flow (AI if provider key present)
-
-- Create draft
-- Generate content
-- Publish
-- Verify `/blog` and `/blog/[slug]`
+- Add required API keys or provider configs
+- Validate feature-specific flows
 
 ## Operational Notes
 
-- NextAuth v5 uses JWT sessions; refresh tokens stored in DB with rotation.
-- Encryption uses AES-256-GCM with `ENCRYPTION_KEY`.
-- Sign-in route is `/sign-in` to avoid admin middleware loops.
-- Admin routes protected by middleware.
+- Use JWT sessions or DB sessions depending on the app.
+- Encrypt secrets at rest using a server-side key.
+- Protect admin routes with middleware.
 
 ## Recommended Automation
 
 If AI has tokens, it should:
 
 1. Create repo and push code.
-2. Set Vercel env vars and project settings.
+2. Set hosting env vars and project settings.
 3. Trigger deploy.
 4. Verify endpoints.
 5. Report status with URLs and steps left for human.
