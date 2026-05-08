@@ -1,12 +1,12 @@
 import { marked } from "marked";
 import sanitizeHtml from "sanitize-html";
-import { getHighlighter } from "shiki";
+import { createHighlighter } from "shiki";
 
-let highlighterPromise: ReturnType<typeof getHighlighter> | null = null;
+let highlighterPromise: ReturnType<typeof createHighlighter> | null = null;
 
 function getCachedHighlighter() {
   if (!highlighterPromise) {
-    highlighterPromise = getHighlighter({
+    highlighterPromise = createHighlighter({
       themes: ["github-dark-default"],
       langs: ["bash", "css", "html", "javascript", "json", "markdown", "tsx", "typescript"],
     });
