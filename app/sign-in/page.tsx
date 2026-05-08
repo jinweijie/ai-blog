@@ -1,8 +1,18 @@
 import { signIn } from "@/lib/auth";
 import { AuthError } from "next-auth";
 import { redirect } from "next/navigation";
-import { isRedirectError } from "next/dist/client/components/redirect";
 import FormSubmitButton from "@/components/FormSubmitButton";
+
+function isNextRedirect(error: unknown): boolean {
+  if (!error || typeof error !== "object") {
+    return false;
+  }
+  if ("digest" in error) {
+    const digest = (error as { digest?: unknown }).digest;
+    return typeof digest === "string" && digest.startsWith("NEXT_REDIRECT");
+  }
+  return false;
+}
 
 export default function SignInPage({
   searchParams,
@@ -27,7 +37,7 @@ export default function SignInPage({
         redirectTo: searchParams.callbackUrl || "/admin",
       });
     } catch (error) {
-      if (isRedirectError(error)) {
+      if (isNextRedirect(error)) {
         throw error;
       }
       const authType =
