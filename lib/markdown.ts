@@ -49,8 +49,8 @@ export async function renderMarkdown(source: string) {
     const lang = loaded.has(requestedLang as BundledLanguage)
       ? (requestedLang as BundledLanguage)
       : ("text" as SpecialLanguage);
-    const tokens = highlighter.codeToTokens(code, { lang, theme: "github-dark-default" });
-    const lines = tokens
+    const tokensResult = highlighter.codeToTokens(code, { lang, theme: "github-dark-default" });
+    const lines = tokensResult.tokens
       .map((lineTokens, index) => {
         const content = lineTokens
           .map((token) => {
