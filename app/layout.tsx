@@ -44,6 +44,17 @@ export default async function RootLayout({
         <div className="min-h-screen">
           <SiteChrome title={settings.siteTitle} />
           <main className="mx-auto max-w-6xl px-6 py-10">{children}</main>
+          <footer className="border-t border-slate-200">
+            <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4 text-xs text-slate-500">
+              <span>© {new Date().getFullYear()} {settings.siteTitle}</span>
+              <span>
+                Deploy{" "}
+                <code className="rounded bg-slate-100 px-2 py-0.5">
+                  {(process.env.NEXT_PUBLIC_COMMIT_SHA || "unknown").slice(0, 6)}
+                </code>
+              </span>
+            </div>
+          </footer>
         </div>
       </body>
     </html>
