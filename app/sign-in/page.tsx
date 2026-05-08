@@ -26,9 +26,15 @@ export default function SignInPage({
         redirectTo: searchParams.callbackUrl || "/admin",
       });
     } catch (error) {
-      if (error instanceof AuthError) {
+      const authType =
+        error instanceof AuthError
+          ? error.type ?? "CredentialsSignin"
+          : typeof error === "object" && error && "type" in error
+            ? String((error as { type?: unknown }).type || "CredentialsSignin")
+            : null;
+      if (authType) {
         const params = new URLSearchParams();
-        params.set("error", error.type ?? "CredentialsSignin");
+        params.set("error", authType);
         if (searchParams.callbackUrl) {
           params.set("callbackUrl", searchParams.callbackUrl);
         }
