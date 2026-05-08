@@ -1,6 +1,7 @@
 import { marked } from "marked";
 import sanitizeHtml from "sanitize-html";
 import { createHighlighter } from "shiki";
+import type { BundledLanguage, SpecialLanguage } from "shiki";
 
 let highlighterPromise: ReturnType<typeof createHighlighter> | null = null;
 
@@ -42,8 +43,12 @@ export async function renderMarkdown(source: string) {
   asyncRenderer.code = async (code, info) => {
     const requestedLang = normalizeLang(info);
     const highlighter = await getCachedHighlighter();
-    const loaded = new Set(highlighter.getLoadedLanguages());
-    const lang = loaded.has(requestedLang) ? requestedLang : "text";
+    const loaded = new Set<BundledLanguage>(
+      highlighter.getLoadedLanguages() as BundledLanguage[]
+    );
+    const lang = loaded.has(requestedLang as BundledLanguage)
+      ? (requestedLang as BundledLanguage)
+      : ("text" as SpecialLanguage);
     const tokens = highlighter.codeToTokens(code, { lang, theme: "github-dark-default" });
     const lines = tokens
       .map((lineTokens, index) => {
