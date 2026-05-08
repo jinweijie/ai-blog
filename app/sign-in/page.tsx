@@ -1,20 +1,47 @@
 import { signIn } from "@/lib/auth";
+import { AuthError } from "next-auth";
+import { redirect } from "next/navigation";
 import FormSubmitButton from "@/components/FormSubmitButton";
 
 export default function SignInPage({
   searchParams,
 }: {
-  searchParams: { callbackUrl?: string };
+  searchParams: { callbackUrl?: string; error?: string };
 }) {
+  const errorMessage =
+    searchParams.error === "CredentialsSignin"
+      ? "Invalid email or password."
+      : searchParams.error
+        ? "Sign in failed. Please try again."
+        : null;
+
   async function handleSignIn(formData: FormData) {
     "use server";
     const email = String(formData.get("email") || "");
     const password = String(formData.get("password") || "");
-    await signIn("credentials", {
-      email,
-      password,
-      redirectTo: searchParams.callbackUrl || "/admin",
-    });
+    try {
+      await signIn("credentials", {
+        email,
+        password,
+        redirectTo: searchParams.callbackUrl || "/admin",
+      });
+    } catch (error) {
+      const authType =
+        error instanceof AuthError
+          ? error.type ?? "CredentialsSignin"
+          : typeof error === "object" && error && "type" in error
+            ? String((error as { type?: unknown }).type || "CredentialsSignin")
+            : null;
+      if (authType) {
+        const params = new URLSearchParams();
+        params.set("error", authType);
+        if (searchParams.callbackUrl) {
+          params.set("callbackUrl", searchParams.callbackUrl);
+        }
+        redirect(`/sign-in?${params.toString()}`);
+      }
+      throw error;
+    }
   }
 
   return (
@@ -24,6 +51,11 @@ export default function SignInPage({
         <p className="text-sm text-slate-600">Use your admin credentials.</p>
       </div>
       <form action={handleSignIn} className="space-y-4">
+        {errorMessage ? (
+          <div className="rounded-md border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">
+            {errorMessage}
+          </div>
+        ) : null}
         <div className="space-y-1">
           <label htmlFor="email">Email</label>
           <input id="email" name="email" type="email" required className="w-full" />
