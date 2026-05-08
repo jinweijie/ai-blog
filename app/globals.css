@@ -149,6 +149,57 @@ a.btn-primary,
   @apply mt-4 border-l-4 border-slate-300 pl-4 text-slate-600;
 }
 
+.reader-content pre,
+.reader-content code {
+  font-family: ui-monospace, SFMono-Regular, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+.reader-content .code-block {
+  @apply mt-5 overflow-hidden rounded-xl border border-slate-800/70 bg-slate-950 text-slate-100 shadow-sm;
+}
+
+.reader-content .code-block-toolbar {
+  @apply flex items-center justify-between border-b border-slate-800/80 bg-slate-900 px-4 py-2 text-xs uppercase tracking-widest text-slate-300;
+}
+
+.reader-content .code-lang {
+  @apply text-[10px] font-semibold text-slate-400;
+}
+
+.reader-content .code-copy {
+  @apply rounded-full border border-slate-700 px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-slate-200 hover:border-slate-500 hover:text-white;
+}
+
+.reader-content .code-copy[data-copied="true"] {
+  @apply border-emerald-400 text-emerald-200;
+}
+
+.reader-content .code-block pre {
+  @apply overflow-x-auto px-0 py-4;
+  margin: 0;
+}
+
+.reader-content .code-block code {
+  @apply block;
+}
+
+.reader-content .code-line {
+  @apply grid gap-4 px-4 text-sm leading-6;
+  grid-template-columns: 28px minmax(0, 1fr);
+}
+
+.reader-content .line-number {
+  @apply text-right text-[11px] text-slate-500;
+}
+
+.reader-content .line-content {
+  @apply whitespace-pre;
+}
+
+.reader-content :not(pre) > code {
+  @apply rounded-md bg-slate-100 px-1.5 py-0.5 text-sm text-slate-800;
+}
+
 .reader-content img {
   @apply my-6 rounded-xl border border-slate-200;
   max-width: 100%;
