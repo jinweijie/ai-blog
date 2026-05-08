@@ -19,6 +19,8 @@ export default async function BlogPost({
     notFound();
   }
 
+  const html = await renderMarkdown(post.body);
+
   return (
     <article className="space-y-6">
       <header className="space-y-2">
@@ -43,7 +45,7 @@ export default async function BlogPost({
       )}
       <div
         className="reader-surface reader-content"
-        dangerouslySetInnerHTML={{ __html: renderMarkdown(post.body) }}
+        dangerouslySetInnerHTML={{ __html: html }}
       />
     </article>
   );

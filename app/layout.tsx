@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { getBlogSettings } from "@/lib/settings";
 import SiteChrome from "@/components/SiteChrome";
 import ThemeBoot from "@/components/ThemeBoot";
+import CodeCopyClient from "@/components/CodeCopyClient";
 import { Source_Serif_4, Manrope } from "next/font/google";
 
 const serif = Source_Serif_4({
@@ -39,6 +40,7 @@ export default async function RootLayout({
     >
       <body>
         <ThemeBoot accent={settings.accent} fontPair={settings.fontPair} />
+        <CodeCopyClient />
         <div className="min-h-screen">
           <SiteChrome title={settings.siteTitle} />
           <main className="mx-auto max-w-6xl px-6 py-10">{children}</main>

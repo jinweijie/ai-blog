@@ -1,8 +1,64 @@
 import { marked } from "marked";
 import sanitizeHtml from "sanitize-html";
+import { getHighlighter } from "shiki";
 
-export function renderMarkdown(source: string) {
-  const html = marked.parse(source || "", { async: false }) as string;
+let highlighterPromise: ReturnType<typeof getHighlighter> | null = null;
+
+function getCachedHighlighter() {
+  if (!highlighterPromise) {
+    highlighterPromise = getHighlighter({
+      themes: ["github-dark-default"],
+      langs: ["bash", "css", "html", "javascript", "json", "markdown", "tsx", "typescript"],
+    });
+  }
+  return highlighterPromise;
+}
+
+function escapeHtml(value: string) {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll("\"", "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+function normalizeLang(info?: string) {
+  if (!info) {
+    return "text";
+  }
+  const lang = info.split(/\s+/)[0]?.toLowerCase() ?? "text";
+  if (lang === "js") return "javascript";
+  if (lang === "ts") return "typescript";
+  if (lang === "md") return "markdown";
+  return lang;
+}
+
+export async function renderMarkdown(source: string) {
+  const renderer = new marked.Renderer();
+  renderer.code = async (code, info) => {
+    const lang = normalizeLang(info);
+    const highlighter = await getCachedHighlighter();
+    const tokens = highlighter.codeToTokens(code, { lang, theme: "github-dark-default" });
+    const lines = tokens
+      .map((lineTokens, index) => {
+        const content = lineTokens
+          .map((token) => {
+            const color = token.color ?? "#e2e8f0";
+            return `<span style="color:${color}">${escapeHtml(token.content)}</span>`;
+          })
+          .join("");
+        const safeContent = content.length === 0 ? "&nbsp;" : content;
+        return `<span class="code-line"><span class="line-number">${index + 1}</span><span class="line-content">${safeContent}</span></span>`;
+      })
+      .join("");
+
+    return `<div class="code-block" data-lang="${escapeHtml(lang)}"><div class="code-block-toolbar"><span class="code-lang">${escapeHtml(
+      lang
+    )}</span><button type="button" class="code-copy" data-code-copy aria-label="Copy code">Copy</button></div><pre><code>${lines}</code></pre></div>`;
+  };
+
+  const html = (await marked.parse(source || "", { async: true, renderer })) as string;
   return sanitizeHtml(html, {
     allowedTags: [
       "p",
@@ -19,6 +75,9 @@ export function renderMarkdown(source: string) {
       "blockquote",
       "code",
       "pre",
+      "div",
+      "span",
+      "button",
       "a",
       "img",
       "hr",
@@ -27,6 +86,10 @@ export function renderMarkdown(source: string) {
       a: ["href", "name", "target", "rel"],
       img: ["src", "alt", "title"],
       code: ["class"],
+      pre: ["class"],
+      div: ["class", "data-lang"],
+      span: ["class", "style"],
+      button: ["class", "data-code-copy", "type", "aria-label"],
     },
     allowedSchemes: ["http", "https", "mailto"],
   });
