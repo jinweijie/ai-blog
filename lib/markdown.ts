@@ -40,8 +40,10 @@ export async function renderMarkdown(source: string) {
     code: (code: string, info?: string) => Promise<string>;
   };
   asyncRenderer.code = async (code, info) => {
-    const lang = normalizeLang(info);
+    const requestedLang = normalizeLang(info);
     const highlighter = await getCachedHighlighter();
+    const loaded = new Set(highlighter.getLoadedLanguages());
+    const lang = loaded.has(requestedLang) ? requestedLang : "text";
     const tokens = highlighter.codeToTokens(code, { lang, theme: "github-dark-default" });
     const lines = tokens
       .map((lineTokens, index) => {
