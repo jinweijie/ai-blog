@@ -1,5 +1,9 @@
-import { redirect } from "next/navigation";
+import BlogIndex from "@/components/BlogIndex";
 
-export default function Home() {
-  redirect("/blog");
+export default async function Home({
+  searchParams,
+}: {
+  searchParams?: { tag?: string; month?: string };
+}) {
+  return <BlogIndex searchParams={searchParams} />;
 }
