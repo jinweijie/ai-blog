@@ -28,6 +28,8 @@ Build a Next.js 14 (App Router) full-stack app with a public blog and authentica
 7. Git workflow automation
    - Codex creates feature branches per task, commits with conventional commits, pushes to GitHub.
    - Codex installs GitHub CLI (gh) via apt and uses it to open PRs to main.
+   - PRs include `Closes #<issue>` for traceability and auto-close.
+   - Codex enables auto-merge (`gh pr merge --auto --squash`) after CI passes.
 
 ## Test Plan
 1. Auth: admin login success/failure, protected route redirect.
@@ -38,6 +40,6 @@ Build a Next.js 14 (App Router) full-stack app with a public blog and authentica
 ## Assumptions
 1. Use Postgres on Neon and Prisma as ORM.
 2. UI stack: Next.js + shadcn/ui + Tailwind.
-3. Linear integration is manual for v1 (no API automation).
+3. GitHub Issues are the source of task intake for v1 (no Linear integration).
 4. Provider API keys stored encrypted in DB (encryption strategy decided during implementation).
 5. gh will be installed locally and authenticated for PR creation.

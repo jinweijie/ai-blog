@@ -185,6 +185,13 @@ If AI has tokens, it should:
 4. Verify endpoints.
 5. Report status with URLs and steps left for human.
 
+## GitHub Issues Workflow (Optional)
+
+- Use `gh issue list` to select the task to implement.
+- Create a branch and PR that references the issue.
+- Include `Closes #<issue>` in the PR body to link and auto-close.
+- Enable auto-merge with `gh pr merge --auto --squash` once CI is green.
+
 ## Token Safety
 
 - Tokens should be short-lived.
