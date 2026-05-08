@@ -191,6 +191,7 @@ If AI has tokens, it should:
 - Create a branch and PR that references the issue.
 - Include `Closes #<issue>` in the PR body to link and auto-close.
 - Enable auto-merge with `gh pr merge --auto --squash` once CI is green.
+- Before closing the issue, add a brief summary comment describing the changes and any relevant follow-ups.
 
 ## Token Safety
 
