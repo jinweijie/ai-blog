@@ -30,6 +30,7 @@ Build a Next.js 14 (App Router) full-stack app with a public blog and authentica
    - Codex installs GitHub CLI (gh) via apt and uses it to open PRs to main.
    - PRs include `Closes #<issue>` for traceability and auto-close.
    - Codex enables auto-merge (`gh pr merge --auto --squash`) after CI passes.
+   - Before closing issues, Codex adds a short implementation summary comment.
 
 ## Test Plan
 1. Auth: admin login success/failure, protected route redirect.
