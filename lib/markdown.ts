@@ -36,7 +36,10 @@ function normalizeLang(info?: string) {
 
 export async function renderMarkdown(source: string) {
   const renderer = new marked.Renderer();
-  renderer.code = async (code, info) => {
+  const asyncRenderer = renderer as unknown as {
+    code: (code: string, info?: string) => Promise<string>;
+  };
+  asyncRenderer.code = async (code, info) => {
     const lang = normalizeLang(info);
     const highlighter = await getCachedHighlighter();
     const tokens = highlighter.codeToTokens(code, { lang, theme: "github-dark-default" });
