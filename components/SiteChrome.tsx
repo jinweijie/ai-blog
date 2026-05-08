@@ -1,4 +1,5 @@
 import Link from "next/link";
+import ReaderSettings from "@/components/ReaderSettings";
 
 export default function SiteChrome({
   title,
@@ -18,6 +19,7 @@ export default function SiteChrome({
           <Link className="text-slate-700 hover:text-slate-900" href="/admin">
             Admin
           </Link>
+          <ReaderSettings />
         </nav>
       </div>
     </header>

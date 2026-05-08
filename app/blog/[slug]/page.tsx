@@ -2,7 +2,6 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import { renderMarkdown } from "@/lib/markdown";
-import ReaderToolbar from "@/components/ReaderToolbar";
 import { getBlogSettings } from "@/lib/settings";
 
 export default async function BlogPost({
@@ -32,7 +31,6 @@ export default async function BlogPost({
           Published {post.publishedAt?.toDateString()}
         </p>
       </header>
-      <ReaderToolbar />
       {post.coverImageUrl && (
         <Image
           src={post.coverImageUrl}
