@@ -36,13 +36,10 @@ function normalizeLang(info?: string) {
 }
 
 export async function renderMarkdown(source: string) {
+  const highlighter = await getCachedHighlighter();
   const renderer = new marked.Renderer();
-  const asyncRenderer = renderer as unknown as {
-    code: (code: string, info?: string) => Promise<string>;
-  };
-  asyncRenderer.code = async (code, info) => {
+  renderer.code = (code, info) => {
     const requestedLang = normalizeLang(info);
-    const highlighter = await getCachedHighlighter();
     const loaded = new Set<BundledLanguage>(
       highlighter.getLoadedLanguages() as BundledLanguage[]
     );
@@ -68,7 +65,7 @@ export async function renderMarkdown(source: string) {
     )}</span><button type="button" class="code-copy" data-code-copy aria-label="Copy code">Copy</button></div><pre><code>${lines}</code></pre></div>`;
   };
 
-  const html = (await marked.parse(source || "", { async: true, renderer })) as string;
+  const html = marked.parse(source || "", { async: false, renderer }) as string;
   return sanitizeHtml(html, {
     allowedTags: [
       "p",
