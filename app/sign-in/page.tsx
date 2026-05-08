@@ -1,6 +1,7 @@
 import { signIn } from "@/lib/auth";
 import { AuthError } from "next-auth";
 import { redirect } from "next/navigation";
+import { isRedirectError } from "next/dist/client/components/redirect";
 import FormSubmitButton from "@/components/FormSubmitButton";
 
 export default function SignInPage({
@@ -26,6 +27,9 @@ export default function SignInPage({
         redirectTo: searchParams.callbackUrl || "/admin",
       });
     } catch (error) {
+      if (isRedirectError(error)) {
+        throw error;
+      }
       const authType =
         error instanceof AuthError
           ? error.type ?? "CredentialsSignin"
